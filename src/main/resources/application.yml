@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    username: "SA"
+    password: ""
+    url: "jdbc:h2:tcp://localhost/~/test"
+
+  jpa:
+    database: h2
+    hibernate:
+      naming:
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+      ddl-auto: update
+      use-new-id-generator-mappings: true
+    show-sql: true
+    open-in-view: false
+    generate-ddl: true
+
+
