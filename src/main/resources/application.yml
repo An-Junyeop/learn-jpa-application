@@ -4,7 +4,9 @@ spring:
     username: "SA"
     password: ""
     url: "jdbc:h2:tcp://localhost/~/test"
-
+  devtools:
+    restart:
+      enabled: true
   jpa:
     database: h2
     hibernate:
@@ -16,5 +18,3 @@ spring:
     show-sql: true
     open-in-view: false
     generate-ddl: true
-
-

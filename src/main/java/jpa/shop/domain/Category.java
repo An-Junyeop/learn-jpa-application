@@ -20,7 +20,7 @@ public class Category extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "ITEM_ID"))
     private List<Item> items = new ArrayList<Item>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PARENT_ID")
     private Category parent;
 

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello World</title>
+</head>
+<body>
+<div>
+    <th:block th:each="member : ${members}">
+        <p th:text="${member.getName()}"></p>
+    </th:block>
+</div>
+</body>
+</html>
