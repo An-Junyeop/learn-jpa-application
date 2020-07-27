@@ -2,6 +2,7 @@ package jpa.shop.controller.main;
 
 import jpa.shop.domain.Member;
 import jpa.shop.repository.MemberRepository;
+import jpa.shop.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,12 +14,13 @@ import java.util.List;
 public class MainController {
 
     @Autowired
-    MemberRepository memberRepository;
+    MemberService memberService;
 
     @GetMapping("")
     public String main(Model model) {
-        List<Member> list = memberRepository.findAll();
-        model.addAttribute("members", list);
+        Member member = memberService.findOne(9L);
+
+        model.addAttribute("member", member);
         return "index";
     }
 }
