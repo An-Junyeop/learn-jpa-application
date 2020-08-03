@@ -19,6 +19,10 @@ public class Delivery extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private DeliveryStatus status;
 
+    public Delivery(Address address) {
+        this.address = address;
+    }
+
     public Long getId() {
         return id;
     }
