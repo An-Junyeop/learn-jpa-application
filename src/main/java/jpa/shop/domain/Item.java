@@ -1,5 +1,7 @@
 package jpa.shop.domain;
 
+import jpa.shop.exception.NotEnoughStockException;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,18 @@ public abstract class Item extends BaseEntity {
 
     @ManyToMany(mappedBy = "items")
     private List<Category> categories = new ArrayList<Category>();
+
+    public void addStock(int quantity) {
+        this.stockQuantity += quantity;
+    }
+    public void removeStock(int quantity) {
+        int restStock = this.stockQuantity - quantity;
+
+        if(restStock < 0) {
+            throw new NotEnoughStockException("수량이 부족합니다.");
+        }
+        this.stockQuantity = restStock;
+    }
 
     public Long getId() {
         return id;
