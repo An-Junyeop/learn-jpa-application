@@ -1,5 +1,6 @@
 package jpa.shop.config;
 
+import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
@@ -67,11 +68,11 @@ public class Config implements WebMvcConfigurer {
     public SpringResourceTemplateResolver templateResolver() {
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
         templateResolver.setApplicationContext(this.applicationContext);
-        templateResolver.setPrefix("classpath:/templates/view/");
+        templateResolver.setPrefix("classpath:/templates/");
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode(TemplateMode.HTML);
-        templateResolver.setCacheable(false);
         templateResolver.setCharacterEncoding("UTF-8");
+        templateResolver.setCacheable(false);
         return templateResolver;
     }
 
@@ -80,6 +81,7 @@ public class Config implements WebMvcConfigurer {
         SpringTemplateEngine templateEngine = new SpringTemplateEngine();
         templateEngine.setTemplateResolver(templateResolver());
         templateEngine.setEnableSpringELCompiler(true);
+        templateEngine.addDialect(new LayoutDialect());
         return templateEngine;
     }
 
