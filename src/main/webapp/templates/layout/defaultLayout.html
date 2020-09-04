@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <title layout:title-pattern="$LAYOUT_TITLE : $CONTENT_TITLE">페이지</title>
     <!-- Head -->
-    <th:block th:repalce="fragments/commonHead"></th:block>
+    <th:block th:replace="fragments/commonHead"></th:block>
 </head>
 <body>
     <!-- Navbar -->
@@ -11,10 +12,7 @@
 
     <!-- 페이지 컨텐츠 -->
     <th:block layout:fragment="content"></th:block>
-
-    <!-- Footer -->
-    <th:block th:replace="fragments/commonFooter :: commonFooter"></th:block>
-
+    
     <!-- Script -->
     <th:block th:replace="fragments/commonScript"></th:block>
     <th:block layout:fragment="pageCustomScript"></th:block>

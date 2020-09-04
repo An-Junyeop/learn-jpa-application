@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout/defaultLayout">
+<head>
+    <title>아이템</title>
+</head>
+<body>
+<th:block layout:fragment="content">
+    <div class="container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">상품명</th>
+                    <th scope="col">가격</th>
+                    <th scope="col">재고</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">1</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                    <td><button type="button" class="btn btn-primary">수정</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</th:block>
+
+<th:block layout:fragment="pageCustomScript"></th:block>
+<th:block layout:fragment="pageCustomCss"></th:block>
+</body>
+</html>

@@ -1,6 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="commonNavbar">
-    <nav>nav</nav>
+    <ul id="nav">
+        <li class="nav-item"
+            th:classappend="${#httpServletRequest.requestURI.contains('member') ? 'active' : ''}">
+            <a href="/member">MEMBER</a>
+        </li>
+
+        <li class="nav-item"
+            th:classappend="${#httpServletRequest.requestURI.contains('item') ? 'active' : ''}">
+            <a href="/item">PRODUCT</a>
+        </li>
+
+        <li class="nav-item"
+            th:classappend="${#httpServletRequest.requestURI.contains('order') ? 'active' : ''}">
+            <a href="/order">ORDER</a>
+        </li>
+    </ul>
 </th:block>
 </html>

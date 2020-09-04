@@ -1,0 +1,28 @@
+:root {
+    --white: #f7fdff;
+    --black: #1f2223;
+}
+* {
+    font-family: 'Noto Sans KR', sans-serif;
+    color: var(--white);
+    margin: 0;
+    padding: 0;
+}
+body {
+    display: flex;
+    display: -ms-flex;
+    flex-direction: column;
+    -ms-flex-direction: column;
+    background: #2C2F32;
+}
+
+.container {
+    width: 80%;
+    max-width: 1140px;
+    min-width: 540px;
+    margin: 0 auto;
+}
+
+table thead {
+     border-bottom: 1px solid var(--white);
+}

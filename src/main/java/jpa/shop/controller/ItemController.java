@@ -11,8 +11,8 @@ public class ItemController {
     @Autowired
     ItemService itemService;
 
-    @GetMapping("/items/new")
-    public String createForm() {
-        return "views/item/createForm";
+    @GetMapping("/item")
+    public String itemPage() {
+        return "views/items";
     }
 }
