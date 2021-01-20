@@ -1,5 +1,7 @@
 package jpa.shop.domain;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jpa.shop.exception.NotEnoughStockException;
 
 import javax.persistence.*;
@@ -9,6 +11,12 @@ import java.util.List;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "DTYPE")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "DTYPE")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Book.class, name = "B"),
+        @JsonSubTypes.Type(value = Album.class, name = "A"),
+        @JsonSubTypes.Type(value = Movie.class, name = "M")
+})
 public abstract class Item extends BaseEntity {
 
     @Id
@@ -24,6 +32,16 @@ public abstract class Item extends BaseEntity {
 
     @ManyToMany(mappedBy = "items")
     private List<Category> categories = new ArrayList<Category>();
+
+    public Item() {}
+
+    public Item(Long id, String name, int price, int stockQuantity, List<Category> categories) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.stockQuantity = stockQuantity;
+        this.categories = categories;
+    }
 
     public void addStock(int quantity) {
         this.stockQuantity += quantity;

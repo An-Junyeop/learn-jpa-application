@@ -2,21 +2,21 @@
     width: 100%;
     display: flex;
     display: -ms-flex;
-    padding: 15px 0px;
-    margin-bottom: 30px;
-    background: var(--black);
+    padding: 15px 0;
+    background: var(--nav);
 }
 
 #nav li.nav-item {
-    margin: 0px 20px;
+    margin: 0 20px;
     list-style: none;
 }
 
 #nav li.nav-item a {
-    color: #f7fdff;
+    color: #8498BF;
+    font-weight: 500;
     text-decoration: none;
 }
 #nav li.nav-item:hover a,
 #nav li.nav-item.active a {
-    color: #a4d2ff;
+    color: #4F638C;
 }

@@ -8,30 +8,147 @@
 <body>
 <th:block layout:fragment="content">
     <div class="container">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">상품명</th>
-                    <th scope="col">가격</th>
-                    <th scope="col">재고</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td><button type="button" class="btn btn-primary">수정</button></td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="page-title">
+            PRODUCT
+        </div>
+        <div class="list">
+            <div class="list-body">
+                <th:block th:each="item : ${items}">
+                    <div class="item item-book" th:if="${item instanceof T(jpa.shop.domain.Book)}">
+                        <div class="item-icon">
+                            <img src="/static/images/book-icon2.png" alt="book icon">
+                        </div>
+                        <div class="item-body">
+                            <div class="item-info">
+                                <div class="item-name" th:text="${item.getName()}"></div>
+                                <div class="item-quantity" th:text="${item.getStockQuantity()}"></div>
+                                <div class="item-price" th:text="${#numbers.formatInteger(item.getPrice(), 3, 'COMMA')}"></div>
+                            </div>
+                            <div class="division"></div>
+                            <div class="item-info">
+                                <div class="item-author" th:text="${item.getAuthor()}"></div>
+                                <div class="item-isbn" th:text="${item.getIsbn()}"></div>
+                            </div>
+                            <div class="item-info">
+                                <div class="item-date" th:text="${item.getCreateDate()}"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="item item-album" th:if="${item instanceof T(jpa.shop.domain.Album)}">
+                        <div class="item-icon">
+                            <img src="/static/images/album-icon.png" alt="album icon">
+                        </div>
+                        <div class="item-body">
+                            <div class="item-info">
+                                <div class="item-name" th:text="${item.getName()}"></div>
+                                <div class="item-quantity" th:text="${item.getStockQuantity()}"></div>
+                                <div class="item-price" th:text="${#numbers.formatInteger(item.getPrice(), 3, 'COMMA')}"></div>
+                            </div>
+                            <div class="division"></div>
+                            <div class="item-info">
+                                <div th:text="${item.getArtist()}"></div>
+                                <div th:text="${item.getEtc()}"></div>
+                            </div>
+                            <div class="item-info">
+                                <div class="item-date" th:text="${item.getCreateDate()}"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="item item-movie" th:if="${item instanceof T(jpa.shop.domain.Movie)}">
+                        <div class="item-icon">
+                            <img src="/static/images/movie-icon.png" alt="movie icon">
+                        </div>
+                        <div class="item-body">
+                            <div class="item-info">
+                                <div class="item-name" th:text="${item.getName()}"></div>
+                                <div class="item-quantity" th:text="${item.getStockQuantity()}"></div>
+                                <div class="item-price" th:text="${#numbers.formatInteger(item.getPrice(), 3, 'COMMA')}"></div>
+                            </div>
+                            <div class="division"></div>
+                            <div class="item-info">
+                                <div th:text="${item.getActor()}"></div>
+                                <div th:text="${item.getDirector()}"></div>
+                            </div>
+                            <div class="item-info">
+                                <div class="item-date" th:text="${item.getCreateDate()}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal">
+        <div class="modal-wrap">
+            <div class="modal-header">
+                <div class="header-title">
+                    신규추가
+                </div>
+                <div class="header-close btn-cancel">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <div class="modal-item">
+                    <input type="text" class="modal-input" placeholder="상품명"/>
+                </div>
+                <div class="modal-item">
+                    <input type="text" class="modal-input" placeholder="가격"/>
+                </div>
+                <div class="modal-item">
+                    <input type="text" class="modal-input" placeholder="수량"/>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="btn btn-submit">
+                    <i class="fas fa-check"></i>
+                </div>
+                <div class="btn btn-cancel">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+        </div>
     </div>
 </th:block>
 
-<th:block layout:fragment="pageCustomScript"></th:block>
+<th:block layout:fragment="pageCustomScript">
+    <script>
+        const submitButton = document.getElementsByClassName("btn-submit")[0];
+        submitButton.addEventListener('click', function () {
+           const httpRequest = new XMLHttpRequest();
+
+           if (!httpRequest) return false;
+           else {
+               httpRequest.onreadystatechange = function () {
+                   if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                       if (httpRequest.status === 201) {
+                          alert(httpRequest.responseText);
+                       } else {
+                           alert("실패");
+                       }
+                   }
+               };
+               httpRequest.open("POST", "/api/item");
+               httpRequest.setRequestHeader('Content-Type', 'application/json');
+               httpRequest.send(JSON.stringify({
+                   DTYPE: "B",
+                   name: "테스트책",
+                   price: 12000,
+                   stockQuantity: 14,
+                   author: "작가명",
+                   isbn: "978-89-5460-326-3"
+               }));
+           }
+        });
+
+        modal.modalOpenEvent(document.getElementsByClassName('modal-open-button'));
+    </script>
+</th:block>
 <th:block layout:fragment="pageCustomCss"></th:block>
 </body>
 </html>

@@ -1,28 +1,33 @@
 package jpa.shop.domain;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.MappedSuperclass;
-import java.util.Date;
+import java.sql.Timestamp;
 
 @MappedSuperclass
 public class BaseEntity {
 
-    private Date createDate;
+    @CreationTimestamp
+    private Timestamp createDate;
 
-    private Date lastModifiedDate;
+    @UpdateTimestamp
+    private Timestamp lastModifiedDate;
 
-    public Date getCreateDate() {
+    public Timestamp getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    public void setCreateDate(Timestamp createDate) {
         this.createDate = createDate;
     }
 
-    public Date getLastModifiedDate() {
+    public Timestamp getLastModifiedDate() {
         return lastModifiedDate;
     }
 
-    public void setLastModifiedDate(Date lastModifiedDate) {
+    public void setLastModifiedDate(Timestamp lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
 }
