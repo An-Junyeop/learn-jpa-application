@@ -8,10 +8,22 @@
 <body>
 <th:block layout:fragment="content">
     <div class="container">
-        <div class="page-title">
-            PRODUCT
+        <div class="header">
+            <div class="page-title">
+                PRODUCT
+            </div>
+
+            <div class="dropdown">
+                <div class="dropdown-button">추가</div>
+                <div class="dropdown-content">
+                    <a class="modal-open-button" data-type="B" href="#">Book</a>
+                    <a class="modal-open-button" data-type="A" href="#">Album</a>
+                    <a class="modal-open-button" data-type="M" href="#">Movie</a>
+                </div>
+            </div>
         </div>
         <div class="list">
+            <!-- Book -->
             <div class="list-body">
                 <th:block th:each="item : ${items}">
                     <div class="item item-book" th:if="${item instanceof T(jpa.shop.domain.Book)}">
@@ -26,15 +38,28 @@
                             </div>
                             <div class="division"></div>
                             <div class="item-info">
-                                <div class="item-author" th:text="${item.getAuthor()}"></div>
-                                <div class="item-isbn" th:text="${item.getIsbn()}"></div>
+                                <div class="item-data-left item-author" th:text="${item.getAuthor()}"></div>
+                                <div class="item-data-right item-isbn" th:text="${item.getIsbn()}"></div>
                             </div>
                             <div class="item-info">
                                 <div class="item-date" th:text="${item.getCreateDate()}"></div>
                             </div>
+                            <div class="item-button">
+                                <div class="item-update" th:data-id="${item.getId()}">
+                                    <i class="fas fa-edit"></i>
+                                </div>
+                                <div class="item-delete" th:data-id="${item.getId()}">
+                                    <i class="far fa-trash-alt"></i>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                </th:block>
+            </div>
 
+            <!-- Album -->
+            <div class="list-body">
+                <th:block th:each="item : ${items}">
                     <div class="item item-album" th:if="${item instanceof T(jpa.shop.domain.Album)}">
                         <div class="item-icon">
                             <img src="/static/images/album-icon.png" alt="album icon">
@@ -47,15 +72,28 @@
                             </div>
                             <div class="division"></div>
                             <div class="item-info">
-                                <div th:text="${item.getArtist()}"></div>
-                                <div th:text="${item.getEtc()}"></div>
+                                <div class="item-data-left item-artist" th:text="${item.getArtist()}"></div>
+                                <div class="item-data-right item-etc" th:text="${item.getEtc()}"></div>
                             </div>
                             <div class="item-info">
                                 <div class="item-date" th:text="${item.getCreateDate()}"></div>
                             </div>
+                            <div class="item-button">
+                                <div class="item-update" th:data-id="${item.getId()}">
+                                    <i class="fas fa-edit"></i>
+                                </div>
+                                <div class="item-delete" th:data-id="${item.getId()}">
+                                    <i class="far fa-trash-alt"></i>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                </th:block>
+            </div>
 
+            <!-- Movie -->
+            <div class="list-body">
+                <th:block th:each="item : ${items}">
                     <div class="item item-movie" th:if="${item instanceof T(jpa.shop.domain.Movie)}">
                         <div class="item-icon">
                             <img src="/static/images/movie-icon.png" alt="movie icon">
@@ -68,11 +106,19 @@
                             </div>
                             <div class="division"></div>
                             <div class="item-info">
-                                <div th:text="${item.getActor()}"></div>
-                                <div th:text="${item.getDirector()}"></div>
+                                <div class="item-data-left item-actor" th:text="${item.getActor()}"></div>
+                                <div class="item-data-right item-director" th:text="${item.getDirector()}"></div>
                             </div>
                             <div class="item-info">
                                 <div class="item-date" th:text="${item.getCreateDate()}"></div>
+                            </div>
+                            <div class="item-button">
+                                <div class="item-update" th:data-id="${item.getId()}">
+                                    <i class="fas fa-edit"></i>
+                                </div>
+                                <div class="item-delete" th:data-id="${item.getId()}">
+                                    <i class="far fa-trash-alt"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -92,17 +138,7 @@
                 </div>
             </div>
 
-            <div class="modal-body">
-                <div class="modal-item">
-                    <input type="text" class="modal-input" placeholder="상품명"/>
-                </div>
-                <div class="modal-item">
-                    <input type="text" class="modal-input" placeholder="가격"/>
-                </div>
-                <div class="modal-item">
-                    <input type="text" class="modal-input" placeholder="수량"/>
-                </div>
-            </div>
+            <div class="modal-body"></div>
 
             <div class="modal-footer">
                 <div class="btn btn-submit">
@@ -118,35 +154,211 @@
 
 <th:block layout:fragment="pageCustomScript">
     <script>
-        const submitButton = document.getElementsByClassName("btn-submit")[0];
-        submitButton.addEventListener('click', function () {
-           const httpRequest = new XMLHttpRequest();
+        const modalEl = document.getElementsByClassName('modal')[0]
+        const modalBody = modalEl.getElementsByClassName('modal-body')[0];
+        const submitButton = document.getElementsByClassName('btn-submit')[0];
+        const updateButton = document.querySelectorAll('.item-update');
+        const deleteButton = document.querySelectorAll('.item-delete');
+        const baseInput = [
+            {
+                name: 'name',
+                type: 'text',
+                placeholder: 'Name',
+                value: ''
+            },
+            {
+                name: 'price',
+                type: 'text',
+                placeholder: 'Price',
+                value: ''
+            },
+            {
+                name: 'stockQuantity',
+                type: 'text',
+                placeholder: 'Quantity',
+                value: ''
+            }
+        ];
+        const type = {
+            B: [
+                {
+                    name: 'author',
+                    type: 'text',
+                    placeholder: 'Author',
+                    value: ''
+                },
+                {
+                    name: 'isbn',
+                    type: 'text',
+                    placeholder: 'Isbn',
+                    value: ''
+                },
+                {
+                    name: 'DTYPE',
+                    type: 'hidden',
+                    placeholder: '',
+                    value: 'B'
+                }
+            ],
+            A: [
+                {
+                    name: 'artist',
+                    type: 'text',
+                    placeholder: 'Artist',
+                    value: ''
+                },
+                {
+                    name: 'etc',
+                    type: 'text',
+                    placeholder: 'Etc',
+                    value: ''
+                },
+                {
+                    name: 'DTYPE',
+                    type: 'hidden',
+                    placeholder: '',
+                    value: 'A'
+                }
+            ],
+            M: [
+                {
+                    name: 'actor',
+                    type: 'text',
+                    placeholder: 'Actor',
+                    value: '',
+                },
+                {
+                    name: 'director',
+                    type: 'text',
+                    placeholder: 'Director',
+                    value: '',
+                },
+                {
+                    name: 'DTYPE',
+                    type: 'hidden',
+                    placeholder: '',
+                    value: 'M'
+                }
+            ]
+        }
 
-           if (!httpRequest) return false;
-           else {
-               httpRequest.onreadystatechange = function () {
-                   if (httpRequest.readyState === XMLHttpRequest.DONE) {
-                       if (httpRequest.status === 201) {
-                          alert(httpRequest.responseText);
-                       } else {
-                           alert("실패");
-                       }
+        // Create item Submit
+        submitButton.addEventListener('click', function () {
+           const data = {};
+
+           Array.from(modalBody.getElementsByClassName('modal-input')).forEach(function (input) {
+               data[input.getAttribute('name')] = input.value;
+           });
+
+           ajax({
+               url: '/api/item',
+               method: 'POST',
+               requestHeader: [
+                   {
+                       name: 'Content-Type',
+                       value: 'application/json'
                    }
-               };
-               httpRequest.open("POST", "/api/item");
-               httpRequest.setRequestHeader('Content-Type', 'application/json');
-               httpRequest.send(JSON.stringify({
-                   DTYPE: "B",
-                   name: "테스트책",
-                   price: 12000,
-                   stockQuantity: 14,
-                   author: "작가명",
-                   isbn: "978-89-5460-326-3"
-               }));
-           }
+               ],
+               data: JSON.stringify(data),
+               successCode: 201,
+               successFn: function(response) {
+                   location.reload();
+               },
+               errorFn: function (error) {
+                   console.log(error);
+                   alert('실패하였습니다.');
+               }
+           });
         });
 
-        modal.modalOpenEvent(document.getElementsByClassName('modal-open-button'));
+        // Modal Open event binding
+        modal.modalOpenEventBinding(document.getElementsByClassName('modal-open-button'));
+
+        // Modal open event handler
+        modalEl.addEventListener('build', function (e) {
+
+            baseInput.forEach(function (data) {
+                const modalItem = document.createElement('div');
+                modalItem.classList.add('modal-item');
+
+                const modalInput = document.createElement('input');
+                modalInput.classList.add('modal-input');
+                modalInput.setAttribute('type', data.type);
+                modalInput.setAttribute('name', data.name);
+                modalInput.setAttribute('placeholder', data.placeholder);
+                modalInput.setAttribute('value', data.value);
+
+                modalItem.append(modalInput);
+                modalBody.append(modalItem);
+            });
+
+            type[e.detail].forEach(function (data) {
+                const modalItem = document.createElement('div');
+                modalItem.classList.add('modal-item');
+
+                const modalInput = document.createElement('input');
+                modalInput.classList.add('modal-input');
+                modalInput.setAttribute('type', data.type);
+                modalInput.setAttribute('name', data.name);
+                modalInput.setAttribute('placeholder', data.placeholder);
+                modalInput.setAttribute('value', data.value);
+
+                modalItem.append(modalInput);
+                modalBody.append(modalItem);
+            });
+        });
+
+        // Modal destroy event handler
+        modalEl.addEventListener('destroy', function (e) {
+            Array.from(modalBody.getElementsByClassName('modal-item')).forEach(function (el) {
+                el.remove();
+            });
+        });
+
+        // Item update event
+        updateButton.forEach(function (button) {
+            button.addEventListener('click', function () {
+               const id = this.dataset.id;
+
+               ajax({
+                   url: '/api/items/' + id,
+                   method: 'GET',
+                   successCode: 200,
+                   successFn: function (response) {
+                       const item = JSON.parse(response);
+                       modal.modalOpenEvent(item.DTYPE);
+
+                       console.log(document.querySelector('.modal-input[name=price]'));
+                   },
+                   errorFn: function (error) {
+                       console.log(error);
+                   }
+               })
+            });
+
+        });
+
+        // Item delete event
+        deleteButton.forEach(function (button) {
+            button.addEventListener('click', function () {
+                const id = this.dataset.id;
+                ajax({
+                    url: '/api/items/' + id,
+                    method: 'DELETE',
+                    requestHeader: [],
+                    data: '',
+                    successCode: 200,
+                    successFn: function(response) {
+                        alert("삭제 기능 추가 예정");
+                    },
+                    errorFn: function (error) {
+                        console.log(error);
+                        alert('실패하였습니다.');
+                    }
+                });
+
+            });
+        });
     </script>
 </th:block>
 <th:block layout:fragment="pageCustomCss"></th:block>
